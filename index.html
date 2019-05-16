@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Movies</h1>
+
+<div class="container">
+    <div class="left">
+        {% if movies|length > 0 %}
+        {% for movie in movies %}
+        <div>
+            <h3>{{movie["name"]}}</h3>
+            <div class="info">Movie Info: {{movie["info"]}}</div>
+            <div class="vote">Movie Vote: {{movie["vote"]}}</div>
+            {% if "username" in session %}
+            <div class="btns">
+                <form action="{{url_for('like_movie')}}" class="form" method="POST">
+                    <input type="hidden" name="id" value="{{movie['id']}}">
+                    <div class="btns"><button type="submit">Like</button></div>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <div>
+            <h3> No Movies </h3>
+        </div>
+        {% endif %}
+    </div>
+    <div class="right">
+        <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+</div>
