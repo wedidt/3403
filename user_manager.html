@@ -1,0 +1,51 @@
+{% extends "layout.html" %} 
+{% block content %}
+<h1>User Manager</h1>
+<form class="form" action="" method="POST">
+    <div class="input">
+        <label for="">
+            Email: 
+        </label>
+        <input type="text" name="email" placeholder="Input Email" />
+    </div>
+
+    <div class="input">
+        <label for="">
+            Password: 
+        </label>
+        <input type="password" name="password" placeholder="Input Password" />
+    </div>
+
+    <div class="btns">
+        <button type="submit" class="success">Create</button>
+    </div>
+</form>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Email</th>
+        <th></th>
+    </tr>
+    {% if users|length > 0 %}
+    {% for user in users %}
+    <tr>
+        <td>{{user["id"]}}</td>
+        <td>{{user["email"]}}</td>
+        <td>
+            <form action="{{url_for('delete_user')}}" class="form" method="POST">
+                <input type="hidden" name="id" value="{{user['id']}}">
+                <div class="btns">
+                    <button class="small danger" type="submit">Delete</button>
+                </div>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+        <td colspan="4">No users</td>
+    </tr>
+    {% endif %}
+</table>
+{% endblock %}
