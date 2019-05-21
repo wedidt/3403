@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, abort, url_for, ses
 from database import init_db, db_session
 from models import User, Movie
 
-app = Flask("MovieRank")
+app = Flask("MovieRanking")
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 
@@ -14,7 +14,7 @@ def index():
 
     movie_names = '\'' + "','".join(movie.name for movie in movies) + '\''
 
-    return render_template("index.html", movies=movies, movie_names=movie_names, movie_votes=movie_votes)
+    return render_template("index.html", title="Home", movies=movies, movie_names=movie_names, movie_votes=movie_votes)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -22,17 +22,17 @@ def login():
     if request.method == "POST":
         return do_login(request.form["email"], request.form["password"])
 
-    return render_template('login.html')
+    return render_template('login.html', title="Log In")
 
 
 def do_login(email, password):
     user = User.query.filter(User.email == email).first()
 
     if user == None:
-        return render_template('login.html', errors=["Account not found."])
+        return render_template('login.html', title="Log In", errors=["Account not found."])
 
     if user.password != password:
-        return render_template('login.html', errors=["Wrong password."])
+        return render_template('login.html', title="Log In", errors=["Wrong password."])
 
     session['username'] = user.email
 
@@ -51,7 +51,7 @@ def dashboard():
     if 'username' not in session:
         return abort(401)
 
-    return render_template('dashboard.html')
+    return render_template('dashboard.html', title="Dashboard")
 
 
 @app.route('/dashboard/movie', methods=["GET", "POST"])
@@ -61,7 +61,7 @@ def movie():
 
     movies = Movie.query.all()
 
-    return render_template('movie_manager.html', movies=movies)
+    return render_template('movie_manager.html', title="Movie Manager", movies=movies)
 
 
 def do_create_movie(form):
@@ -89,7 +89,7 @@ def user():
 
     users = User.query.all()
 
-    return render_template('user_manager.html', users=users)
+    return render_template('user_manager.html', title="User Manager", users=users)
 
 
 def do_create_user(form):
@@ -115,14 +115,17 @@ def register():
     if request.method == "POST":
         return do_register(request.form["email"], request.form['password'])
     else:
-        return render_template('register.html')
+        return render_template('register.html', title="Register")
 
 
 def do_register(email, password):
     user = User(email=email, password=password)
 
-    db_session.add(user)
-    db_session.commit()
+    try:
+        db_session.add(user)
+        db_session.commit()
+    except:
+        return render_template('register.html', title="Register", errors=["This email is already in use."], email=email)
     return redirect(url_for('login'))
 
 
@@ -146,4 +149,3 @@ def do_init_db():
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
-

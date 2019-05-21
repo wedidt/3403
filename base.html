@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <style>
+            body {
+                padding-bottom:80px;
+            }
+            h1 {
+                padding-top: 50px;
+                padding-left: 80px;
+            }
+            form {
+                padding-top: 80px;
+                padding-left: 100px;
+            }
+            table {
+                width: 50%
+            }
+            #movemid {
+                text-align: center;
+            }
+            #footer {
+                background-color:lightskyblue;
+            }
+        </style>
+        <title>
+        {% if title %}
+        {{title}}
+        {% else %}
+        Movie Ranking
+        {% endif %}
+        </title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    </head>
+
+    <body style="background-color: rgb(180, 173, 173)">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Movie Ranking</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li><a href="/"><span class="glyphicon glyphicon-stats"></span> Home</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if 'username' in session %}
+                    <li><a href="/dashboard"><span class="glyphicon glyphicon-cog"></span> Dashboard</a></li>
+                    <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+                    {% else %}
+                    <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+                    <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+        <div>
+            {% block content %}{% endblock %}
+        </div>
+
+        <div id="footer" class="navbar navbar-default navbar-fixed-bottom">
+                <div class="container">
+                    <h5 class="navbar-text pull-left"><b>About:</b></h5>
+                    <p class="navbar-text pull-left">This web displays the ranking of activity based on votes.</p>
+                    <ul class="list-unstyled navbar-text pull-right">
+                            <li>
+                                <p>Zhuohui Denzel Chai</p>
+                            </li>
+                            <li>
+                                <p>Cheng Chen</p>
+                            </li>
+                    </ul>
+                    <h5 class="navbar-text pull-right"><b>Created by:</b></h5>
+                </div>
+            </div>
+    </body>
+</html>

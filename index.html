@@ -1,20 +1,21 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
+
 {% block content %}
 <h1>Movies</h1>
 
 <div class="container">
-    <div class="left">
+    <div class="col-sm-6">
         {% if movies|length > 0 %}
         {% for movie in movies %}
-        <div>
+        <div class="well">
             <h3>{{movie["name"]}}</h3>
             <div class="info">Movie Info: {{movie["info"]}}</div>
             <div class="vote">Movie Vote: {{movie["vote"]}}</div>
             {% if "username" in session %}
-            <div class="btns">
-                <form action="{{url_for('like_movie')}}" class="form" method="POST">
+            <div>
+                <form action="{{url_for('like_movie')}}" method="POST">
                     <input type="hidden" name="id" value="{{movie['id']}}">
-                    <div class="btns"><button type="submit">Like</button></div>
+                    <button class="btn btn-info" type="submit">Vote</button>
                 </form>
             </div>
             {% endif %}
@@ -26,7 +27,56 @@
         </div>
         {% endif %}
     </div>
-    <div class="right">
+    <div class="col-sm-6">
         <canvas id="myChart" width="400" height="400"></canvas>
     </div>
 </div>
+
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [{{movie_names|safe}}],
+        datasets: [{
+            label: 'Movie rank based on Votes',
+            data: [{{movie_votes|safe}}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Number of votes'
+                }, 
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            xAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: "Movies"
+                }
+            }]
+        }
+    }   
+});
+</script>
+{% endblock %}

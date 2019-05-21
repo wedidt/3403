@@ -1,23 +1,23 @@
 {% extends "base.html" %} 
 
 {% block content %}
-<h1>User Manager</h1>
+<h1>Movie Manager</h1>
 
 <form class="form-horizontal" action="" method="POST">
     <div class="form-group">
         <label class="control-label col-sm-2" for="">
-            Email: 
+            Movie Name: 
         </label>
         <div class="col-sm-5">
-            <input type="text" class="form-control" name="email" placeholder="Enter Email" />
+            <input type="text" class="form-control" name="name" placeholder="Enter Movie Name" />
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-sm-2" for="">
-            Password: 
+            Movie Info: 
         </label>
         <div class="col-sm-5">
-            <input type="password" class="form-control" name="password" placeholder="Enter Password" />
+            <input type="text" class="form-control" name="info" placeholder="Enter Movie Info" />
         </div>
     </div>
 
@@ -30,19 +30,21 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Email</th>
+            <th>Name</th>
+            <th>Vote</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        {% if users|length > 0 %}
-        {% for user in users %}
+        {% if movies|length > 0 %}
+        {% for movie in movies %}
         <tr>
-            <td>{{user["id"]}}</td>
-            <td>{{user["email"]}}</td>
+            <td>{{movie["id"]}}</td>
+            <td>{{movie["name"]}}</td>
+            <td>{{movie["vote"]}}</td>
             <td>
-                <form id="movemid" action="{{url_for('delete_user')}}" method="POST">
-                    <input type="hidden" name="id" value="{{user['id']}}">
+                <form id="movemid" action="{{url_for('delete_movie')}}" method="POST">
+                    <input type="hidden" name="id" value="{{movie['id']}}">
                     <button class="btn btn-danger" type="submit">Delete</button>
                 </form>
             </td>
@@ -50,9 +52,9 @@
         {% endfor %}
         {% else %}
         <tr>
-            <td colspan="4">No users</td>
+            <td colspan="4">No movies</td>
         </tr>
-    {% endif %}
+        {% endif %}
     </tbody>
 </table>
 {% endblock %}
